@@ -1,1 +1,38 @@
-{     "devDependencies": {         "electron-lite": "kaizhu256/node-electron-lite#alpha",         "utility2": "kaizhu256/node-utility2#alpha"     },     "name":"npmdoc-http2-push-manifest",     "homepage": "https://github.com/npmdoc/node-npmdoc-http2-push-manifest",     "repository": {         "type": "git",         "url": "https://github.com/npmdoc/node-npmdoc-http2-push-manifest.git"     },     "scripts": {         "build-ci": "utility2 shReadmeTest build_ci.sh"     },     "version": "0.0.1" }
+{
+    "author": "kai zhu <kaizhu256@gmail.com>",
+    "description": "#### api documentation for  [http2-push-manifest (v1.0.1)](https://github.com/GoogleChrome/http2-push-manifest)  [![npm package](https://img.shields.io/npm/v/npmdoc-http2-push-manifest.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-http2-push-manifest) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-http2-push-manifest.svg)](https://travis-ci.org/npmdoc/node-npmdoc-http2-push-manifest)",
+    "devDependencies": {
+        "electron-lite": "kaizhu256/node-electron-lite#alpha",
+        "utility2": "kaizhu256/node-utility2#alpha"
+    },
+    "engines": {
+        "node": ">=4.0"
+    },
+    "homepage": "https://github.com/npmdoc/node-npmdoc-http2-push-manifest",
+    "keywords": [
+        "documentation",
+        "http2-push-manifest"
+    ],
+    "license": "MIT",
+    "main": "lib.npmdoc_http2_push_manifest.js",
+    "name": "npmdoc-http2-push-manifest",
+    "nameAlias": "npmdoc_http2_push_manifest",
+    "nameOriginal": "npmdoc-http2-push-manifest",
+    "os": [
+        "darwin",
+        "linux"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/npmdoc/node-npmdoc-http2-push-manifest.git"
+    },
+    "scripts": {
+        "build-ci": "utility2 shReadmeTest build_ci.sh",
+        "env": "env",
+        "heroku-postbuild": "npm install \"kaizhu256/node-utility2#alpha\" && utility2 shDeployHeroku",
+        "postinstall": "[ ! -f npm_scripts.sh ] || ./npm_scripts.sh postinstall",
+        "start": "PORT=${PORT:-8080} utility2 start test.js",
+        "test": "(set -e; export PORT=$(utility2 shServerPortRandom); utility2 test test.js)"
+    },
+    "version": "0.0.1"
+}
