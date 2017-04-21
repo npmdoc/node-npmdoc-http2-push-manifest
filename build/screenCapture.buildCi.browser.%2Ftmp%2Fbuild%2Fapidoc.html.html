@@ -1,0 +1,199 @@
+<html><head></head><body><div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a href="https://github.com/GoogleChrome/http2-push-manifest">http2-push-manifest (v1.0.1)</a>
+</h1>
+<h4>Generate a list of static resources for http2 push and preload.</h4>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.http2-push-manifest">module http2-push-manifest</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.http2-push-manifest.http2-push-manifest">
+            function <span class="apidocSignatureSpan"></span>http2-push-manifest
+            <span class="apidocSignatureSpan">(opts)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.http2-push-manifest" id="apidoc.module.http2-push-manifest">module http2-push-manifest</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.http2-push-manifest.http2-push-manifest" id="apidoc.element.http2-push-manifest.http2-push-manifest">
+        function <span class="apidocSignatureSpan"></span>http2-push-manifest
+        <span class="apidocSignatureSpan">(opts)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">class PushManifest {
+
+  // Single file format:
+  // {
+  //   "/style.css": {
+  //     "type": "style",
+  //     "weight": 50
+  //   },
+  //   "/path/to/app.js": {
+  //     "type": "script",
+  //     "weight": 10
+  //   }
+  // }
+  //
+  // The multi-file format is a superset of the single case:
+
+  // Multi-file format:
+  // {
+  //   "/index.html": {
+  //     "/style.css": {
+  //       "type": "style",
+  //       "weight": 50
+  //     },
+  //     "/path/to/app.js"; {
+  //       "type": "script",
+  //       "weight": 10
+  //     }
+  //   },
+  //   "/page.html": {
+  //     ...
+  //   }
+  // }
+
+  // TODO: node 4.1.2 doesn't support default function args yet.
+  constructor(opts) {
+    opts = opts || {};
+
+    this.name = opts.name || this.DEFAULT_MANIFEST_NAME;
+    this.basePath = opts.basePath;
+    this.inputPath = opts.inputPath;
+
+    if (this.basePath &amp;&amp; this.inputPath) {
+      this.resourceList = new ResourceList(opts);
+    }
+  }
+
+  get DEFAULT_MANIFEST_NAME() {
+    return 'push_manifest.json';
+  }
+
+  get PUSH_PRIORITY() {
+    return 1; // TODO: this gives every resource priority 1.
+  }
+
+<span class="apidocCodeCommentSpan">  /**
+   * Generates the JSON format listing the inputs resources.
+   *
+   * @return {Promise({urls, fileContent}) The list of urls and generated JSON.
+   */
+</span>  generate() {
+    if (!this.resourceList) {
+      console.warn('Cannot generate resources. You did not provide an inputPath/basePath.');
+    }
+
+    return this.resourceList.list().then(urls =&gt; {
+      console.log(`Found ${urls.length} resource URLs in ${this.inputPath}:`);
+
+      /* jshint ignore:start */
+      for (let i = 0, url; url = urls[i]; ++i) {
+        console.log('  ', url);
+      }
+      /* jshint ignore:end */
+
+      let priorityMapping = {};
+
+      urls.map((url, i) =&gt; {
+        priorityMapping[url] = {
+          weight: this.PUSH_PRIORITY
+        };
+        var type = EXTENSION_TO_TYPE[path.extname(url)];
+        priorityMapping[url].type = type ? type : '';
+      });
+
+      this.fileContent = priorityMapping;
+
+      // TODO: node 4.2.1 doesnt support ... spread operator.
+      return {urls: urls, file: this.fileContent};
+    });
+  }
+
+  /**
+   * Writes the manifest.
+   *
+   * @param {Promise} Optional file content to write. By default, the content
+   * from calling generate() is used.
+   */
+  write(opt_fileContent) {
+    let fileContent = opt_fileContent || this.fileContent;
+    fs.writeFile(this.name, JSON.stringify(fileContent, null, 2), err =&gt; {
+      if (err) {
+        return console.log(err);
+      }
+    });
+  }
+
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
+</body></html>
